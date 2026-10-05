@@ -1,0 +1,2 @@
+export interface DashboardStatsProps { stats: Array<{ label: string; value: string | number; trend?: number }>; }
+export default function DashboardStats({ stats }: DashboardStatsProps) { return <section aria-label="Dashboard statistics" className="grid grid-cols-2 gap-3">{stats.map((stat) => <article key={stat.label}><span>{stat.label}</span><strong>{stat.value}</strong>{stat.trend !== undefined && <small>{stat.trend >= 0 ? "+" : ""}{stat.trend}%</small>}</article>)}</section>; }
