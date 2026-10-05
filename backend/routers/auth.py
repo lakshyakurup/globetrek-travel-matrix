@@ -4,7 +4,7 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from backend.schemas import TokenResponse, UserCreate, UserPublic
+from backend.schemas import TokenResponse, UserCreate, UserLogin, UserPublic
 from backend.security import hash_password, issue_token, verify_password, verify_token
 from backend.store import StoredUser, store
 
@@ -34,7 +34,7 @@ def register(payload: UserCreate) -> TokenResponse:
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(payload: UserCreate) -> TokenResponse:
+def login(payload: UserLogin) -> TokenResponse:
     user = store.users.get(store.email_index.get(payload.email.lower(), ""))
     if not user or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid credentials")
