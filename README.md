@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Globetrek Travel Matrix
 
-## Getting Started
+[![CI](https://github.com/lakshyakurup/globetrek-travel-matrix/actions/workflows/ci.yml/badge.svg)](https://github.com/lakshyakurup/globetrek-travel-matrix/actions/workflows/ci.yml)
+[![Security](https://github.com/lakshyakurup/globetrek-travel-matrix/actions/workflows/security-scan.yml/badge.svg)](https://github.com/lakshyakurup/globetrek-travel-matrix/actions/workflows/security-scan.yml)
 
-First, run the development server:
+Globetrek is a collaborative travel-planning platform for itinerary design, shared expenses, destination intelligence, and real-time trip coordination.
+
+## Architecture
+
+- **Web:** Next.js 16 App Router, React 19, typed dashboard views, and accessible matrix widgets.
+- **API:** FastAPI routers for authentication, trip collaboration, AI orchestration, and payment webhooks.
+- **Data:** PostgreSQL relational models with optimistic trip versions and a Redis-compatible task/presence bus.
+- **Intelligence:** deterministic budget regression, anomaly detection, recommendations, sentiment, clustering, funnel analysis, and telemetry aggregation.
+- **Operations:** Docker, Nginx, Kubernetes, ECS deployment automation, CodeQL/Snyk scanning, and Lighthouse performance audits.
+
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+For the API:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements.txt
+uvicorn backend.main:app --reload --port 8000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run validation with `npx tsc --noEmit`, `npm run lint`, `npm run build`, and `pytest tests/backend -q`.
 
-## Learn More
+## CLI
 
-To learn more about Next.js, take a look at the following resources:
+The typed matrix CLI supports project initialization, deterministic environment diagnostics, and mock trip generation:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+matrix-cli init ./my-trip
+matrix-cli doctor
+matrix-cli seed --count=5
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Repository map
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`app/` contains routes, `components/` and `src/` contain reusable UI and domain modules, `backend/` contains the API, `infrastructure/` contains deployment manifests, `tests/` contains unit/integration/e2e suites, and `docs/` records operational and security standards.

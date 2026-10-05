@@ -1,0 +1,19 @@
+name: Performance
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * 1"
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - run: npm start &
+      - run: npx wait-on http://localhost:3000
+      - run: npx lighthouse http://localhost:3000/dashboard --output=json --output-path=./lighthouse.json --chrome-flags="--headless --no-sandbox"
+      - uses: actions/upload-artifact@v4
+        with: { name: lighthouse-report, path: lighthouse.json }

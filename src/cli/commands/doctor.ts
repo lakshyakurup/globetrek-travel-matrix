@@ -1,0 +1,3 @@
+import { access } from "node:fs/promises";
+export interface Diagnostic { name: string; ok: boolean; detail: string; }
+export async function runDoctor(env: NodeJS.ProcessEnv = process.env): Promise<Diagnostic[]> { const checks: Diagnostic[] = [{ name: "Node.js", ok: Number(process.versions.node.split(".")[0]) >= 20, detail: process.version }, { name: "JWT secret", ok: Boolean(env.GLOBETREK_JWT_SECRET), detail: env.GLOBETREK_JWT_SECRET ? "configured" : "missing" }]; try { await access("package.json"); checks.push({ name: "package manifest", ok: true, detail: "found" }); } catch { checks.push({ name: "package manifest", ok: false, detail: "missing" }); } return checks; }

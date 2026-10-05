@@ -1,0 +1,14 @@
+{
+  "roles": {
+    "traveler": ["trip:read", "trip:create", "trip:update:own", "expense:create:member"],
+    "collaborator": ["trip:read", "trip:update:member", "expense:create:member", "expense:read"],
+    "trip_admin": ["trip:read", "trip:update", "trip:delete", "expense:read", "expense:manage", "member:manage"],
+    "platform_admin": ["*"]
+  },
+  "resourceRules": {
+    "trip:update:own": "resource.ownerId == subject.id",
+    "trip:update:member": "subject.id in resource.travelers",
+    "expense:create:member": "subject.id in resource.travelers"
+  },
+  "default": "deny"
+}
